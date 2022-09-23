@@ -1,0 +1,8 @@
+.theia/
+notes.txt
+curl.txt
+key.json
+cmd/__debug_bin
+service.json
+*.test
+*.env

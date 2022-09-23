@@ -1,0 +1,7 @@
+main:
+  steps:
+    - logStep:
+        call: sys.log
+        args:
+          text: Hello workflows
+          severity: INFO 

@@ -1,0 +1,22 @@
+# The version tag for the container is taken from the version file
+# To get the version file we need to fetch it with bash as environment variables cannot 
+# be passed between steps we need to fetch it again
+# This issue is also the reason we cannot use the images: construct like
+# images:
+#   - '$_GCR_HOSTNAME/$PROJECT_ID/$_ARTIFACT_REPO_NAME/$_IMAGE_NAME:$VERSION'
+# this issue is ralated https://issuetracker.google.com/issues/203321626
+steps:
+  - name: gcr.io/cloud-builders/docker
+    entrypoint: bash
+    dir: 'gcp/cloud-runs/hello-cloud-run'
+    args:
+      - -c
+      - docker build -t $_GCR_HOSTNAME/$_GCR_PROJECT_ID/$_ARTIFACT_REPO_NAME/$_IMAGE_NAME:$$(cat ./version) .
+    id: Build
+  - name: gcr.io/cloud-builders/docker
+    entrypoint: bash
+    dir: 'gcp/cloud-runs/hello-cloud-run'
+    args:
+      - -c
+      - docker push $_GCR_HOSTNAME/$_GCR_PROJECT_ID/$_ARTIFACT_REPO_NAME/$_IMAGE_NAME:$$(cat ./version)
+    id: Push
